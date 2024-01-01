@@ -4,10 +4,37 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<style>
+    .score-button {
+        width: 70px;
+        height: 30px;
+        border: none;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+    .add-one-score {
+        background-color: lightgreen;
+    }
+
+    .add-two-score {
+        background-color: limegreen;
+    }
+
+    .add-three-score {
+        background-color: forestgreen;
+    }
+
+    .negative-score {
+        background-color: lightcoral;
+    }
+
+</style>
+
+<h2 style="text-align: center; width: 50%;">Counting Score</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Add Players", "Create")
 </p>
 <table class="table">
     <tr>
@@ -17,6 +44,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Score)
         </th>
+        <th>Actions</th>
+        <th></th>
+        <th>Edit Score</th>
         <th></th>
     </tr>
 
@@ -29,9 +59,48 @@
             @Html.DisplayFor(modelItem => item.Score)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PlayerId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PlayerId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PlayerId })
+            @Html.ActionLink("Edit", "Edit", new { id = item.PlayerId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.PlayerId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.PlayerId })
+        </td>
+        <td>
+            <form action="~/Player/UpdateScore" method="post">
+                <input type="hidden" name="id" value="@item.PlayerId" />
+                <input type="hidden" name="score" value="+1" />
+                <input type="submit" value="+1" class="score-button add-one-score" />
+            </form>
+
+            <form action="~/Player/UpdateScore" method="post">
+                <input type="hidden" name="id" value="@item.PlayerId" />
+                <input type="hidden" name="score" value="-1" />
+                <input type="submit" value="-1" class="score-button negative-score" />
+            </form>
+        </td>
+        <td>
+            <form action="~/Player/UpdateScore" method="post">
+                <input type="hidden" name="id" value="@item.PlayerId" />
+                <input type="hidden" name="score" value="+2" />
+                <input type="submit" value="+2" class="score-button add-two-score" />
+            </form>
+
+            <form action="~/Player/UpdateScore" method="post">
+                <input type="hidden" name="id" value="@item.PlayerId" />
+                <input type="hidden" name="score" value="-2" />
+                <input type="submit" value="-2" class="score-button negative-score" />
+            </form>
+        </td>
+        <td>
+            <form action="~/Player/UpdateScore" method="post">
+                <input type="hidden" name="id" value="@item.PlayerId" />
+                <input type="hidden" name="score" value="+3" />
+                <input type="submit" value="+3" class="score-button add-three-score" />
+            </form>
+
+            <form action="~/Player/UpdateScore" method="post">
+                <input type="hidden" name="id" value="@item.PlayerId" />
+                <input type="hidden" name="score" value="-3" />
+                <input type="submit" value="-3" class="score-button negative-score" />
+            </form>
         </td>
     </tr>
 }

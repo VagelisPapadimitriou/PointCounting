@@ -23,15 +23,12 @@ namespace PointCounting.Controllers
             playerService = new PlayerRepository(db);
         }
 
-
-
-
-
-
         // GET: Player
         public ActionResult Index()
         {
-            return View(db.Players.ToList());
+            var players = playerService.GetAll();
+
+            return View(players);
         }
 
         // GET: Player/Details/5
@@ -41,7 +38,7 @@ namespace PointCounting.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Player player = db.Players.Find(id);
+            Player player = playerService.Get(id);
             if (player == null)
             {
                 return HttpNotFound();
@@ -64,8 +61,7 @@ namespace PointCounting.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Players.Add(player);
-                db.SaveChanges();
+                playerService.Add(player);
                 return RedirectToAction("Index");
             }
 
@@ -79,7 +75,7 @@ namespace PointCounting.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Player player = db.Players.Find(id);
+            Player player = playerService.Get(id);
             if (player == null)
             {
                 return HttpNotFound();
@@ -96,8 +92,7 @@ namespace PointCounting.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(player).State = EntityState.Modified;
-                db.SaveChanges();
+                playerService.Edit(player);
                 return RedirectToAction("Index");
             }
             return View(player);
@@ -110,7 +105,7 @@ namespace PointCounting.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Player player = db.Players.Find(id);
+            Player player = playerService.Get(id);
             if (player == null)
             {
                 return HttpNotFound();
@@ -123,11 +118,40 @@ namespace PointCounting.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Player player = db.Players.Find(id);
-            db.Players.Remove(player);
-            db.SaveChanges();
+            playerService.Delete(id);
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public ActionResult UpdateScore(int? id,int score)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Player player = playerService.Get(id);
+            if (player == null)
+            {
+                return HttpNotFound();
+            }
+
+            playerService.UpdatePlayerScore(id, score);
+
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         protected override void Dispose(bool disposing)
         {
