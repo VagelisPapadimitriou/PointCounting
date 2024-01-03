@@ -27,6 +27,7 @@ namespace PointCounting.Controllers
         public ActionResult Index()
         {
             var players = playerService.GetAll();
+            playerService.GetHighestScorePLayer();
 
             return View(players);
         }
@@ -123,7 +124,7 @@ namespace PointCounting.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateScore(int? id,int score)
+        public ActionResult UpdateScore(int? id, int score)
         {
             if (id == null)
             {
@@ -135,23 +136,21 @@ namespace PointCounting.Controllers
                 return HttpNotFound();
             }
 
-            playerService.UpdatePlayerScore(id, score);
+            playerService.UpdatePlayerScore(player, score);
 
             return RedirectToAction("Index");
         }
 
+        public ActionResult GetHighestScorePLayer()
+        {
+            var highestScorePLayer = playerService.GetHighestScorePLayer();
+            if (highestScorePLayer == null)
+            {
+                return HttpNotFound();
+            }
 
-
-
-
-
-
-
-
-
-
-
-
+            return Json(highestScorePLayer, JsonRequestBehavior.AllowGet);
+        }
 
         protected override void Dispose(bool disposing)
         {

@@ -27,7 +27,7 @@ namespace PointCounting.RepositoryServices
             return db.Players.Find(id);
         }
 
-        public void Add(Player player) 
+        public void Add(Player player)
         {
             db.Entry(player).State = EntityState.Added;
             db.SaveChanges();
@@ -46,15 +46,32 @@ namespace PointCounting.RepositoryServices
             db.SaveChanges();
         }
 
-        public void UpdatePlayerScore(int? id, int score)
+        public void UpdatePlayerScore(Player player, int score)
         {
-            Player player = Get(id);
-
             player.Score += score;
             db.Entry(player).State = EntityState.Modified;
             db.SaveChanges();
         }
 
+        public Player GetHighestScorePLayer()
+        {
+            var players = db.Players.ToList();
+            if (players.Count == 0)
+            {
+                return null;
+            }
+
+            var orderedPlayers = players.OrderByDescending(p => p.Score).ToList();
+
+            if (orderedPlayers.Count > 1 && orderedPlayers[0].Score == orderedPlayers[1].Score)
+            {
+
+                return new Player { Name = "Isopalia", Score = orderedPlayers[0].Score };
+            }
+
+            return orderedPlayers[0];
+
+        }
 
     }
 }

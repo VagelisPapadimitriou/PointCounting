@@ -28,13 +28,12 @@
     .negative-score {
         background-color: lightcoral;
     }
-
 </style>
 
 <h2 style="text-align: center; width: 50%;">Counting Score</h2>
 
 <p>
-    @Html.ActionLink("Add Players", "Create")
+    @Html.ActionLink("Add Player", "Create")
 </p>
 <table class="table">
     <tr>
@@ -50,59 +49,98 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Score)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.PlayerId }) |
-            @Html.ActionLink("Details", "Details", new { id = item.PlayerId }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.PlayerId })
-        </td>
-        <td>
-            <form action="~/Player/UpdateScore" method="post">
-                <input type="hidden" name="id" value="@item.PlayerId" />
-                <input type="hidden" name="score" value="+1" />
-                <input type="submit" value="+1" class="score-button add-one-score" />
-            </form>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Score)
 
-            <form action="~/Player/UpdateScore" method="post">
-                <input type="hidden" name="id" value="@item.PlayerId" />
-                <input type="hidden" name="score" value="-1" />
-                <input type="submit" value="-1" class="score-button negative-score" />
-            </form>
-        </td>
-        <td>
-            <form action="~/Player/UpdateScore" method="post">
-                <input type="hidden" name="id" value="@item.PlayerId" />
-                <input type="hidden" name="score" value="+2" />
-                <input type="submit" value="+2" class="score-button add-two-score" />
-            </form>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.PlayerId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.PlayerId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.PlayerId })
+            </td>
+            <td>
+                <form action="~/Player/UpdateScore" method="post">
+                    <input type="hidden" name="id" value="@item.PlayerId" />
+                    <input type="hidden" name="score" value="+1" />
+                    <input type="submit" value="+1" class="score-button add-one-score" />
+                </form>
 
-            <form action="~/Player/UpdateScore" method="post">
-                <input type="hidden" name="id" value="@item.PlayerId" />
-                <input type="hidden" name="score" value="-2" />
-                <input type="submit" value="-2" class="score-button negative-score" />
-            </form>
-        </td>
-        <td>
-            <form action="~/Player/UpdateScore" method="post">
-                <input type="hidden" name="id" value="@item.PlayerId" />
-                <input type="hidden" name="score" value="+3" />
-                <input type="submit" value="+3" class="score-button add-three-score" />
-            </form>
+                <form action="~/Player/UpdateScore" method="post">
+                    <input type="hidden" name="id" value="@item.PlayerId" />
+                    <input type="hidden" name="score" value="-1" />
+                    <input type="submit" value="-1" class="score-button negative-score" />
+                </form>
+            </td>
+            <td>
+                <form action="~/Player/UpdateScore" method="post">
+                    <input type="hidden" name="id" value="@item.PlayerId" />
+                    <input type="hidden" name="score" value="+2" />
+                    <input type="submit" value="+2" class="score-button add-two-score" />
+                </form>
 
-            <form action="~/Player/UpdateScore" method="post">
-                <input type="hidden" name="id" value="@item.PlayerId" />
-                <input type="hidden" name="score" value="-3" />
-                <input type="submit" value="-3" class="score-button negative-score" />
-            </form>
-        </td>
-    </tr>
-}
+                <form action="~/Player/UpdateScore" method="post">
+                    <input type="hidden" name="id" value="@item.PlayerId" />
+                    <input type="hidden" name="score" value="-2" />
+                    <input type="submit" value="-2" class="score-button negative-score" />
+                </form>
+            </td>
+            <td>
+                <form action="~/Player/UpdateScore" method="post">
+                    <input type="hidden" name="id" value="@item.PlayerId" />
+                    <input type="hidden" name="score" value="+3" />
+                    <input type="submit" value="+3" class="score-button add-three-score" />
+                </form>
 
+                <form action="~/Player/UpdateScore" method="post">
+                    <input type="hidden" name="id" value="@item.PlayerId" />
+                    <input type="hidden" name="score" value="-3" />
+                    <input id="dokimi " type="submit" value="-3" class="score-button negative-score" />
+                </form>
+            </td>
+        </tr>
+    }
 </table>
+
+<div id="apotelesmata">
+
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script>
+
+    function getResults(data) {
+        $('#apotelesmata').empty();
+
+        if (data.Name != "Isopalia") {
+            var customString = "<h2>" + data.Name + " is winning with the score of: " + data.Score + "</h2>";
+        }
+        else {
+            var customString = "<h2>At the momment we have a draw with score: " + data.Score + "</h2>";
+        }
+
+        $('#apotelesmata').append(customString);
+    }
+
+    $(document).ready(function () {
+
+            $.ajax({
+                url: '/Player/GetHighestScorePLayer',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+
+                    getResults(data);
+                }
+            })
+    });
+</script>
